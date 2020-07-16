@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+    <body>
+        <h5 id="status"></h5>
+        <button id="startRec">Start Recording</button>
+        <button id="stopRec">Stop Recording</button>
+        <script>
+            function startRec() {
+                var constraints = { audio: {"echoCancellation": false, "noisesuppression": false, "automaticGainControl": false} };
+                var chunks = [];
+                var mediaRecorder;
+
+                navigator.mediaDevices.getUserMedia(constraints)
+                .then(function(stream) {
+                     document.stream = stream;
+                    document.recorder = new MediaRecorder(stream);
+                    var blob = new Blob(chunks, { 'type' : 'audio/wav' });
+                    document.recorder.ondataavailable = function(e) {
+                         chunks.push(e.data);
+                     }
+                     document.recorder.start(10);
+                     document.getElementById("status").innerText = "Issue should repro now";
+                 })
+                 .catch(function(err) {
+                     console.error("Error: " + err);
+                 });
+            }
+
+            function stopRec() {
+                if (document.recorder) {
+                    document.recorder.stop();
+                    document.recorder = null;
+                }
+
+                if (document.stream) {
+                    document.stream.getTracks().forEach(function(t){t.stop();});
+                    document.stream = null;
+                }
+                document.getElementById("status").innerText = "Start recording to repro issue";
+            }
+            document.addEventListener("DOMContentLoaded", function () {
+                stopRec();
+                document.getElementById("startRec").addEventListener("click", function(e) {
+                    startRec();
+                }, false);
+                document.getElementById("stopRec").addEventListener("click", function (e) {
+                    stopRec();
+                }, false)
+            }, false);
+        </script>
+    </body>
+</html>
