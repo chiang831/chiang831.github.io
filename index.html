@@ -20,6 +20,7 @@
                      }
                      document.recorder.start(10);
                      document.getElementById("status").innerText = "Issue should repro now";
+                    console.log(stream.getAudioTracks()[0].getSettings());
                  })
                  .catch(function(err) {
                      console.error("Error: " + err);
