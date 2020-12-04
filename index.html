@@ -6,7 +6,7 @@
         <button id="stopRec">Stop Recording</button>
         <script>
             function startRec() {
-                var constraints = { audio: {"echoCancellation": false, "noisesuppression": false, "automaticGainControl": false} };
+                var constraints = { audio: {"echoCancellation": false, "noisesuppression": false, "automaticGainControl": false, "echoCancellationType": "system"} };
                 var chunks = [];
                 var mediaRecorder;
 
